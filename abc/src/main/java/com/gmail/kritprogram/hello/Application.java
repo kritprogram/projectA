@@ -1,4 +1,4 @@
-package hello;
+package com.gmail.kritprogram.hello;
 
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.SpringApplication;
