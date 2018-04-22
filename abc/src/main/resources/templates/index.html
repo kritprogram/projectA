@@ -1,11 +1,103 @@
-<!DOCTYPE HTML>
+<!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+<!--
+ Указываем кодировку html-страницы
+ Указываем браузеру, что ширина области просмотра равняется ширине этого устройства, а не стандартной ширине в 980px, как он может предполагать по-умолчанию. Для обеспечения адаптивности страницы
+ Устанавливаем  последний доступный стандартный режим отображения в IE
+ Задаем заголовок
+ Подключаем библиотеку jQuery.js и Bootstrap.min.js; библиотеку стилей style.css и Bootstrap.min.css
+ Подключаем свой скрипт index.js
+ -->
 <head>
-    <title>111</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" media="all" th:href="@{/css/style.css}" />
+    <script th:src="@{/js/jquery.js}"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script th:src="@{/js/index.js}"></script>
 </head>
-<body>
-<p th:text="'Hello, ' + ${name} + '!'" />
+<body style="padding-top: 50px;">
+<div class="container">
+    <div class="row">
+        <!--
+       Создаем блок с классом navbar и размещаем на нем поля для формы идентификации, невидемый элемент управления для хранения ID пользователя, кнопку перезагрузки страницы.
+       -->
+        <div class="bs-example navbar navbar-default navbar-fixed-top">
+            <div class="col-md-8 col-md-offset-4">
+                <div class="navbar-form navbar-left">
+                    <input type="hidden" id="tn">
+                    <div class="input-group"  id="hello">
+                        <input type="text" class="form-control" placeholder="Login" aria-describedby="sizing-addon2" style="width:33%" id="login">
+                        <input type="password" class="form-control" placeholder="Password" aria-describedby="sizing-addon2" style="width:33%" id="password">
+                        <input type="button" class="form-control btn btn-primary" aria-describedby="sizing-addon2" style='width:33%' value="log in" id="do">
+                    </div>
+                    <input type="button" class="form-control btn btn-default hidden"  aria-describedby="sizing-addon2"  value="log out" id="logout" >
+                </div>
+            </div>
+        </div>
+        <!--
+Размещаем блоки встроиных классов из Bootstrap.min.css и помещаем в них изображения соответствующие их функциям
+-->
+        <div class="col-md-12">
+            <div class="row">
+                <div class="col-md-6 tile bbb" id="firstBlock">
+                    <img th:src="@{/images/transp.png}" width=50% height=100% alt="lorem" style="margin-left: 25%;">
+                </div>
+                <div class="col-md-6 tile bbb" id="secondBlock">
+                    <img th:src="@{/images/Schedule.png}" width=100% height=100% alt="lorem">
+                </div>
+                <div class="col-md-6 tile bbb" id="thirdBlock">
+                    <img th:src="@{/images/Map.png}" width=50% height=100% alt="lorem" style="margin-left: 25%;">
+                </div>
+                <div class="col-md-6 tile bbb" id="fourthBlock">
+                    <img th:src="@{/images/portal.png}" width=100% height=50% alt="lorem" style="margin-top: 12.5%;">
+                </div>
+            </div>
+        </div>
+        <!--
+Размещаем блок для отображения расписания транспорта; помещаем в него кнопку для закрытия блока и iframe с адресом сервера расписания транспорта
+-->
+        <div class="col-md-12 fullScreen hidden" id="firstBlockFull">
+            <button type="button" class="close" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <iframe src="https://grodno.btrans.by/" style=width:100% height=95% ></iframe>
+        </div>
+        <!--
+Размещаем блок для отображения расписания занятий; помещаем в него кнопку для закрытия блока и блок для прорисовки таблицы расписания занятий авторизовонного пользователя
+-->
+        <div class="col-md-12 fullScreen hidden" id="secondBlockFull">
+            <button type="button" class="close" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <div class="contentSchedule"><p>Необходима идентификация</p></div>
+        </div>
+        <!--
+Размещаем блок для отображения Схемы корпусов ГрГУ; помещаем в него кнопку для закрытия блока и скрипт конструктора Яндекс.карт
+-->
+        <div class="col-md-12 fullScreen hidden" id="thirdBlockFull">
+            <div style="padding-bottom: 15px;">
+                <button type="button" class="close" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <script type="text/javascript" charset="utf-8" src="https://api-maps.yandex.ru/services/constructor/1.0/js/?sid=dLZsGrtMTkuS_kfK7W9FP6Lx7BzybTeo&width=100%&height=95%"></script>
+        </div>
+        <!--
+Размещаем блок ознакомления с возможностями Образовательного портала; помещаем в него кнопку для закрытия блока и iframe с адресом ознакомительного видео
+-->
+        <div class="col-md-12 fullScreen hidden" id="fourthBlockFull">
+            <button type="button" class="close" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <iframe width="100%" height="95%" src="https://www.youtube.com/embed/A4FChP9wq38" frameborder="0" allowfullscreen></iframe>
+        </div>
+    </div>
+</div>
+
 </body>
 </html>
