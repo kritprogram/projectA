@@ -6,40 +6,68 @@
 По полученным данным отресовываем таблицу с расписание авторизованного пользователя в блоке html-страницы расписание занятий
 Если пользователь не авторизован - в блоке расписане занятий отображается сообщение о необходимости идентификации
 */
-$(function(){
-    $('#do').on('click', function(){
-        var params = encodeURI("?login="+ $('#login').val() +"&password=" + $('#password').val());
+$(function () {
+    $('#do').on('click', function () {
+        //var params = encodeURI("?login="+ $('#login').val());
+        var params = encodeURI("?login=jraga_mv_12");
         $
-        .post('https://schedule.grsu.by/api/users'+ params)
-        .done(function(data) {
-            $('#tn').val(data.Id);
-            $('#hello').html('Hello, ' + data.Name);
+        .get('http://api.grsu.by/1.x/app1/getStudent' + params)
+        .done(function (data) {
+            $('#tn').val(data.id);
+            $('#hello').html('Hello, ' + data.fullname);
             $('#logout').removeClass('hidden');
             $
-                    .get('http://schedule.grsu.by/api/timetable/students/' + $('#tn').val())
-                    .done(function(data){
-                    $('.contentSchedule p').addClass('hidden');
+                    .get('http://api.grsu.by/1.x/app1/getGroupSchedule?studentId=' + $('#tn').val())
+                    .done(function (data) {
+                        $('.contentSchedule p').addClass('hidden');
                         var $table = $('<table>').addClass('table')
                                 .append($('<tbody>'));
-                        var tDate = undefined;
-                        data.forEach(function(element) {
-                            if(element.Begin.substr(0,10) === tDate){
-                                printLine($table, element)
-                            } else {
-                                tDate = element.Begin.substr(0,10);
-                                printLineWithDate($table, tDate)
-                                printLine($table, element)
-                            }
+                        data.days.forEach(function (element) {
+                            printLineWithDate($table, element.date)
+                            element.lessons.forEach(function (lesson) {
+                                printLine($table, lesson)
+                            })
                         }, this);
                         $('.contentSchedule').append($table);
                     });
         })
-        .fail(function() {
-                 $('.contentSchedule p').removeClass('hidden');
+        .fail(function () {
+            $('.contentSchedule p').removeClass('hidden');
         });
     });
 
-    var printLineWithDate = function($table, tDate){
+    $('#rfid').on('click', function () {
+        $.getJSON("/Home/RfidId", null, function (item) {
+            $.get('http://api.grsu.by/1.x/app3/getStudentByCard?cardid=' + item)
+			.done(function (data) {
+			    $('#tn').val(data.id);
+			    $.get('http://api.grsu.by/1.x/app1/getStudent' + params)
+				.done(function (data) {
+				    $('#tn').val(data.id);
+				    $('#hello').html('Hello, ' + data.fullname);
+				    $('#logout').removeClass('hidden');
+				    $.get('http://api.grsu.by/1.x/app1/getGroupSchedule?studentId=' + $('#tn').val())
+					.done(function (data) {
+					    $('.contentSchedule p').addClass('hidden');
+					    var $table = $('<table>').addClass('table')
+						.append($('<tbody>'));
+					    data.days.forEach(function (element) {
+					        printLineWithDate($table, element.date)
+					        element.lessons.forEach(function (lesson) {
+					            printLine($table, lesson)
+					        })
+					    }, this);
+					    $('.contentSchedule').append($table);
+					});
+				})
+				.fail(function () {
+				    $('.contentSchedule p').removeClass('hidden');
+				});
+			});
+        });
+    });
+
+    var printLineWithDate = function ($table, tDate) {
         $table
             .append(
                 $('<tr>')
@@ -47,46 +75,46 @@ $(function(){
                     .append($('<td>').html(tDate))
             );
     }
-    var printLine = function($table, element){
+    var printLine = function ($table, lesson) {
         $table
         .append(
             $('<tr>')
-                .append($('<td>').html(element.Begin.substr(11) + ' - ' + element.End.substr(11)))
-                .append($('<td>').html(element.Subject.Title))
-                .append($('<td>').html(element.Location.Title))
-                .append($('<td>').html(element.Speakers.List[0].Name))
+                .append($('<td>').html(lesson.timeStart + ' - ' + lesson.timeEnd))
+                .append($('<td>').html(lesson.type + ' ' + lesson.title))
+                .append($('<td>').html(lesson.address + ': ' + lesson.room))
+                .append($('<td>').html(lesson.teacher.fullname))
             );
     }
-/*
-Функция увеличения размера блока по которому произведен клик
-*/
-    $('#firstBlock').on('click', function(){
+    /*
+    Функция увеличения размера блока по которому произведен клик
+    */
+    $('#firstBlock').on('click', function () {
         $('.col-md-6').addClass('hidden');
         $('#firstBlockFull').removeClass('hidden');
     });
-    $('#secondBlock').on('click', function(){
+    $('#secondBlock').on('click', function () {
         $('.col-md-6').addClass('hidden');
         $('#secondBlockFull').removeClass('hidden');
     });
-    $('#thirdBlock').on('click', function(){
+    $('#thirdBlock').on('click', function () {
         $('.col-md-6').addClass('hidden');
         $('#thirdBlockFull').removeClass('hidden');
     });
-    $('#fourthBlock').on('click', function(){
+    $('#fourthBlock').on('click', function () {
         $('.col-md-6').addClass('hidden');
         $('#fourthBlockFull').removeClass('hidden');
     });
-/*
-Функция уменьшения размеров увеличенного блока по нажатию на кнопку закрытия блока
-*/
-    $('.close').on('click', function(){
+    /*
+    Функция уменьшения размеров увеличенного блока по нажатию на кнопку закрытия блока
+    */
+    $('.close').on('click', function () {
         $('.col-md-6').removeClass('hidden');
         $('.fullScreen').addClass('hidden');
     });
-/*
-Функция перезагрузки страницы по нажатию на кнопку logout
-*/
-    $('#logout').on('click', function(){
+    /*
+    Функция перезагрузки страницы по нажатию на кнопку logout
+    */
+    $('#logout').on('click', function () {
         location.reload();
     });
 });
