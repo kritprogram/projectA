@@ -37,7 +37,7 @@ $(function () {
     });
 
     $('#rfid').on('click', function () {
-        $.getJSON("/Home/RfidId", null, function (item) {
+        $.getJSON("/rfid", null, function (item) {
             $.get('http://api.grsu.by/1.x/app3/getStudentByCard?cardid=' + item)
 			.done(function (data) {
 			    $('#tn').val(data.id);

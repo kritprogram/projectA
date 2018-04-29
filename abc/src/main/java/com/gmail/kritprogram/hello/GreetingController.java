@@ -7,32 +7,20 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-
 @Controller
 public class GreetingController {
 
-    private static String lol = "abcd";
-
-    @RequestMapping("/greeting")
-    public String greeting(@RequestParam(value = "name", required = false, defaultValue = "World") String name, Model model) {
-        model.addAttribute("name", name);
-        //lol = name;
-        return "greeting";
-    }
 
     @RequestMapping("/index")
     public String index(Model model) {
-        model.addAttribute("name", lol);
         return "index";
     }
 
     @RequestMapping("/rfid")
     @ResponseBody
-    public String getRfidData(Model model){
-        Arduino arduino = new Arduino("COM6", 9600);
+    public String getRfidData(Model model) {
+        return "-1057462234";
+        /*Arduino arduino = new Arduino("COM4", 9600);
         boolean connected = arduino.openConnection();
         System.out.println("Соединение установлено: " + connected);
 
@@ -41,7 +29,13 @@ public class GreetingController {
             input = arduino.serialRead();
         }
         arduino.closeConnection();
-        return input;
+        String[] nums = input.split("\n");
+        String hexNum = "FFFFFFFF";
+        for (int i = nums.length - 1; i >= 0; i--) {
+            hexNum = hexNum + nums[i];
+        }
 
+        System.out.println("Считал" + Long.parseUnsignedLong(hexNum, 16))
+        return "" + Long.parseUnsignedLong(hexNum, 16);*/
     }
 }
