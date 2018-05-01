@@ -1,7 +1,7 @@
 /*
 Когда кликаем по кнопке log in выполняется функция авторизации
-создается post запрос со значения логин и пароль введенные пользователем на адрес сервера авторизации ГрГУ
-При успешном выполнении запроса в скрытое поле помещается ID пользователя; на месте полей для идентификации помещается приветсвие пользователя и кнопка logout
+создается get запрос со значением логина введенным пользователем на адрес сервера авторизации ГрГУ
+При успешном выполнении запроса в скрытое поле помещается ID пользователя; на месте поля для идентификации помещается приветсвие пользователя и кнопка logout
 ПО полученному ID пользователя создается get запрос на адрес сервера расписания студентов ГрГУ
 По полученным данным отресовываем таблицу с расписание авторизованного пользователя в блоке html-страницы расписание занятий
 Если пользователь не авторизован - в блоке расписане занятий отображается сообщение о необходимости идентификации
@@ -11,13 +11,13 @@ $(function () {
         //var params = encodeURI("?login="+ $('#login').val());
         var params = encodeURI("?login=jraga_mv_12");
         $
-        .get('http://api.grsu.by/1.x/app1/getStudent' + params)
+        .get('https://api.grsu.by/1.x/app1/getStudent' + params)
         .done(function (data) {
             $('#tn').val(data.id);
             $('#hello').html('Hello, ' + data.fullname);
             $('#logout').removeClass('hidden');
             $
-                    .get('http://api.grsu.by/1.x/app1/getGroupSchedule?studentId=' + $('#tn').val())
+                    .get('https://api.grsu.by/1.x/app1/getGroupSchedule?studentId=' + $('#tn').val())
                     .done(function (data) {
                         $('.contentSchedule p').addClass('hidden');
                         var $table = $('<table>').addClass('table')
@@ -35,18 +35,23 @@ $(function () {
             $('.contentSchedule p').removeClass('hidden');
         });
     });
-
+/*
+Обработчик на нажатие кнопки rfid. Вызываем собственный API который возвращает значение id rfid метки.
+Создается get запрос со значением id RFID метки на адрес сервера авторизации ГрГУ
+При успешном выполнении запроса в скрытое поле помещается ID пользователя; на месте поля для идентификации помещается приветсвие пользователя и кнопка logout
+ПО полученному ID пользователя создается get запрос на адрес сервера расписания студентов ГрГУ
+По полученным данным отресовываем таблицу с расписание авторизованного пользователя в блоке html-страницы расписание занятий
+Если пользователь не авторизован - в блоке расписане занятий отображается сообщение о необходимости идентификации
+*/
     $('#rfid').on('click', function () {
         $.getJSON("/rfid", null, function (item) {
-            $.get('http://api.grsu.by/1.x/app3/getStudentByCard?cardid=' + item)
+            $.get('https://api.grsu.by/1.x/app3/getStudentByCard?cardid=' + item)
 			.done(function (data) {
-			    $('#tn').val(data.id);
-			    $.get('http://api.grsu.by/1.x/app1/getStudent' + params)
-				.done(function (data) {
-				    $('#tn').val(data.id);
-				    $('#hello').html('Hello, ' + data.fullname);
+			    $('#tn').val(data.TN);
+			    var idSt = $('#tn').val(data.TN);
+			        $('#hello').html('Hello');
 				    $('#logout').removeClass('hidden');
-				    $.get('http://api.grsu.by/1.x/app1/getGroupSchedule?studentId=' + $('#tn').val())
+				    $.get('https://api.grsu.by/1.x/app1/getGroupSchedule?studentId=' + idSt)
 					.done(function (data) {
 					    $('.contentSchedule p').addClass('hidden');
 					    var $table = $('<table>').addClass('table')
@@ -63,8 +68,7 @@ $(function () {
 				.fail(function () {
 				    $('.contentSchedule p').removeClass('hidden');
 				});
-			});
-        });
+		});
     });
 
     var printLineWithDate = function ($table, tDate) {
