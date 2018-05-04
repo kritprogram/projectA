@@ -45,29 +45,29 @@ $(function () {
 */
     $('#rfid').on('click', function () {
         $.getJSON("/rfid", null, function (item) {
-            $.get('https://api.grsu.by/1.x/app3/getStudentByCard?cardid=' + item)
+            $.getJSON('https://api.grsu.by/1.x/app3/getStudentAllByCard?cardid=' + item)
 			.done(function (data) {
 			    $('#tn').val(data.TN);
-			    var idSt = $('#tn').val(data.TN);
-			        $('#hello').html('Hello');
-				    $('#logout').removeClass('hidden');
-				    $.get('https://api.grsu.by/1.x/app1/getGroupSchedule?studentId=' + idSt)
-					.done(function (data) {
-					    $('.contentSchedule p').addClass('hidden');
-					    var $table = $('<table>').addClass('table')
-						.append($('<tbody>'));
-					    data.days.forEach(function (element) {
-					        printLineWithDate($table, element.date)
-					        element.lessons.forEach(function (lesson) {
-					            printLine($table, lesson)
-					        })
-					    }, this);
-					    $('.contentSchedule').append($table);
-					});
+                    $('#hello').html('Hello, ' + data.FIO);
+                    $('#logout').removeClass('hidden');
+                    $
+                        .get('https://api.grsu.by/1.x/app1/getGroupSchedule?studentId=' + $('#tn').val())
+                        .done(function (data) {
+                            $('.contentSchedule p').addClass('hidden');
+                            var $table = $('<table>').addClass('table')
+                                    .append($('<tbody>'));
+                            data.days.forEach(function (element) {
+                                printLineWithDate($table, element.date)
+                                element.lessons.forEach(function (lesson) {
+                                    printLine($table, lesson)
+                                })
+                            }, this);
+                            $('.contentSchedule').append($table);
+                        });
 				})
-				.fail(function () {
-				    $('.contentSchedule p').removeClass('hidden');
-				});
+            .fail(function () {
+                $('.contentSchedule p').removeClass('hidden');
+            });
 		});
     });
 
