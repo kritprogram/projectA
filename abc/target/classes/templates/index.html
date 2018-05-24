@@ -27,34 +27,32 @@
         <!--
         Создаем блок с классом navbar и размещаем на нем поля для формы идентификации, невидемый элемент управления для хранения ID пользователя, кнопку перезагрузки страницы.
         -->
-        <div class="bs-example navbar navbar-default navbar-fixed-top">
-            <div class="col-md-8 col-md-offset-4">
-                <div class="navbar-form navbar-left">
+        <div class="navbar navbar-default navbar-fixed-top">
+                <div class="navbar-form form-nav">
                     <input type="hidden" id="tn">
                     <div class="input-group" id="hello">
-                        <input type="button" class="form-control btn btn-primary" aria-describedby="sizing-addon2" style='width:25%' value="rfid" id="rfid">
+                        <input type="button" class="form-control btn btn-primary" aria-describedby="sizing-addon2" style="width:25%" value="rfid" id="rfid">
                         <input type="text" class="form-control" placeholder="Login" aria-describedby="sizing-addon2" style="width:50%" id="login">
-                        <input type="button" class="form-control btn btn-primary" aria-describedby="sizing-addon2" style='width:25%' value="log in" id="do">
+                        <input type="button" class="form-control btn btn-primary" aria-describedby="sizing-addon2" style="width:25%" value="log in" id="do">
                     </div>
                     <input type="button" class="form-control btn btn-default hidden" aria-describedby="sizing-addon2" value="log out" id="logout">
                 </div>
-            </div>
         </div>
         <!--
         Размещаем блоки встроиных классов из Bootstrap.min.css и помещаем в них изображения соответствующие их функциям
         -->
-        <div class="col-md-12">
+        <div class="col-md-12 outTop">
             <div class="row">
-                <div class="col-md-6 tile bbb" id="firstBlock">
+                <div class="col-md-6 tile" id="firstBlock">
                     <img th:src="@{/images/transp.png}" width=50% height=100% alt="lorem" style="margin-left: 25%;">
                 </div>
-                <div class="col-md-6 tile bbb" id="secondBlock">
+                <div class="col-md-6 tile" id="secondBlock">
                     <img th:src="@{/images/Schedule.png}" width=100% height=100% alt="lorem">
                 </div>
-                <div class="col-md-6 tile bbb" id="thirdBlock">
+                <div class="col-md-6 tile" id="thirdBlock">
                     <img th:src="@{/images/Map.png}" width=50% height=100% alt="lorem" style="margin-left: 25%;">
                 </div>
-                <div class="col-md-6 tile bbb" id="fourthBlock">
+                <div class="col-md-6 tile" id="fourthBlock">
                     <img th:src="@{/images/portal.png}" width=100% height=50% alt="lorem" style="margin-top: 12.5%;">
                 </div>
             </div>
@@ -75,7 +73,7 @@
             <button type="button" class="close" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
             </button>
-            <div class="contentSchedule"><p>Необходима идентификация</p></div>
+            <div class="contentSchedule"><div class="message">Необходима авторизация</div></div>
         </div>
         <!--
         Размещаем блок для отображения Схемы корпусов ГрГУ; помещаем в него кнопку для закрытия блока и скрипт конструктора Яндекс.карт
